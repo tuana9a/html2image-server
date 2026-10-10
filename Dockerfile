@@ -4,7 +4,10 @@ ENV LANG=en_US.UTF-8
 ENV PPTRUSER_UID=10042
 ENV DBUS_SESSION_BUS_ADDRESS=autolaunch:
 
-RUN apt-get update \
+# Enable non-free fonts and pre-accept the installer EULA for noninteractive builds.
+RUN sed -i 's/Components: main$/Components: main contrib non-free non-free-firmware/' /etc/apt/sources.list.d/debian.sources \
+    && echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
+    && apt-get update \
     && apt-get install -y --no-install-recommends \
         chromium \
         dbus \
@@ -14,6 +17,7 @@ RUN apt-get update \
         fonts-ipafont-gothic \
         fonts-kacst \
         fonts-khmeros \
+        ttf-mscorefonts-installer \
         fonts-thai-tlwg \
         fonts-wqy-zenhei \
     && rm -rf /var/lib/apt/lists/*
