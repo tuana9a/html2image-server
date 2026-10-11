@@ -18,7 +18,7 @@ CHROMIUM_PATH=/path/to/chromium npm start
 
 ## API
 
-Send HTML as the body of a `POST /screenshot` request with `Content-Type: text/html`. The response is a PNG image; the viewport defaults to 1280 by 720 pixels and the full page is captured. HTML bodies are limited to 2 MB.
+Send HTML as the body of a `POST /screenshot` request with `Content-Type: text/html`. The response is a PNG image of the rendered `<html>` element; the viewport defaults to 1280 by 720 pixels. HTML bodies are limited to 2 MB.
 
 ```sh
 curl -X POST http://localhost:3000/screenshot \

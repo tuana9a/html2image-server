@@ -142,7 +142,7 @@ async function start() {
       await page.setViewport({ width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT });
       page.setDefaultNavigationTimeout(15000);
       await page.setContent(html, { waitUntil: 'networkidle0' });
-      const image = await page.screenshot({ type: 'png', fullPage: true });
+      const image = await page.locator('html').screenshot({ type: 'png' });
 
       response.writeHead(200, {
         'content-type': 'image/png',
