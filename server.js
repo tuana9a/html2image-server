@@ -5,6 +5,8 @@ const puppeteer = require('puppeteer-core');
 
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '0.0.0.0';
+const VIEWPORT_WIDTH = Number(process.env.VIEWPORT_WIDTH || 1280);
+const VIEWPORT_HEIGHT = Number(process.env.VIEWPORT_HEIGHT || 720);
 const MAX_HTML_SIZE = 2 * 1024 * 1024;
 const CHROMIUM_NAMES = [
   'chromium',
@@ -137,7 +139,7 @@ async function start() {
       const html = await readHtml(request);
       context = await browser.createBrowserContext();
       const page = await context.newPage();
-      await page.setViewport({ width: 1280, height: 720 });
+      await page.setViewport({ width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT });
       page.setDefaultNavigationTimeout(15000);
       await page.setContent(html, { waitUntil: 'networkidle0' });
       const image = await page.screenshot({ type: 'png', fullPage: true });

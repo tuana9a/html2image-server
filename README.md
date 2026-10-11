@@ -14,11 +14,11 @@ npm install
 CHROMIUM_PATH=/path/to/chromium npm start
 ```
 
-`CHROMIUM_PATH` is optional when Chromium is on `PATH` or installed at a common Linux location. Set `PORT` to change the default port (`3000`), or `HOST` to change the default bind address (`0.0.0.0`).
+`CHROMIUM_PATH` is optional when Chromium is on `PATH` or installed at a common Linux location. Set `PORT` to change the default port (`3000`), `HOST` to change the default bind address (`0.0.0.0`), or `VIEWPORT_WIDTH` and `VIEWPORT_HEIGHT` to change the default screenshot viewport (`1280` by `720`).
 
 ## API
 
-Send HTML as the body of a `POST /screenshot` request with `Content-Type: text/html`. The response is a PNG image; the viewport is 1280 by 720 pixels and the full page is captured. HTML bodies are limited to 2 MB.
+Send HTML as the body of a `POST /screenshot` request with `Content-Type: text/html`. The response is a PNG image; the viewport defaults to 1280 by 720 pixels and the full page is captured. HTML bodies are limited to 2 MB.
 
 ```sh
 curl -X POST http://localhost:3000/screenshot \
