@@ -77,24 +77,20 @@ function readHtml(request) {
       }
 
       const body = Buffer.concat(chunks).toString('utf8');
-      if (contentType === 'text/html') {
-        resolve(body);
-        return;
-      }
-      if (contentType === 'application/json') {
-        try {
-          const payload = JSON.parse(body);
-          if (typeof payload.html !== 'string') {
-            throw new HttpError(400, 'JSON body must include a string "html" field');
-          }
-          resolve(payload.html);
-        } catch (error) {
-          reject(error instanceof HttpError ? error : new HttpError(400, 'Invalid JSON body'));
-        }
+      if (contentType !== 'application/json') {
+        reject(new HttpError(415, 'Content-Type must be application/json'));
         return;
       }
 
-      reject(new HttpError(415, 'Content-Type must be text/html or application/json'));
+      try {
+        const payload = JSON.parse(body);
+        if (typeof payload.html !== 'string') {
+          throw new HttpError(400, 'JSON body must include a string "html" field');
+        }
+        resolve(payload.html);
+      } catch (error) {
+        reject(error instanceof HttpError ? error : new HttpError(400, 'Invalid JSON body'));
+      }
     });
 
     request.on('error', reject);

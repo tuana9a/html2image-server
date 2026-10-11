@@ -18,15 +18,15 @@ CHROMIUM_PATH=/path/to/chromium npm start
 
 ## API
 
-Send HTML as the body of a `POST /screenshot` request with `Content-Type: text/html`. The response is a PNG image of the rendered `<html>` element; the viewport defaults to 1280 by 720 pixels. HTML bodies are limited to 2 MB.
+Send a JSON object with a string `html` field to `POST /screenshot` using `Content-Type: application/json`. The response is a PNG image of the rendered `<html>` element; the viewport defaults to 1280 by 720 pixels. HTML bodies are limited to 2 MB.
 
 ```sh
 curl -X POST http://localhost:3000/screenshot \
-  -H 'Content-Type: text/html' \
-  --data '<html><body><h1>Hello, world!</h1></body></html>' \
+  -H 'Content-Type: application/json' \
+  --data '{"html":"<html><body><h1>Hello, world!</h1></body></html>"}' \
   --output screenshot.png
 ```
 
-Alternatively, send `Content-Type: application/json` with a string `html` field. `GET /healthz` returns a JSON health status.
+`GET /healthz` returns a JSON health status.
 
 Only submit trusted HTML: rendered pages can execute scripts and request network resources available to the server.
