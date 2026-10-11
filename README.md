@@ -18,12 +18,12 @@ CHROMIUM_PATH=/path/to/chromium npm start
 
 ## API
 
-Send a JSON object with a string `html` field to `POST /screenshot` using `Content-Type: application/json`. The response is a PNG image of the rendered `<html>` element; the viewport defaults to 1280 by 720 pixels. HTML bodies are limited to 2 MB.
+Send a JSON object with a string `html` field to `POST /screenshot` using `Content-Type: application/json`. An optional `selector` CSS selector chooses which element to capture; it defaults to `html`. The response is a PNG image, and the viewport defaults to 1280 by 720 pixels. HTML bodies are limited to 2 MB.
 
 ```sh
 curl -X POST http://localhost:3000/screenshot \
   -H 'Content-Type: application/json' \
-  --data '{"html":"<html><body><h1>Hello, world!</h1></body></html>"}' \
+  --data '{"html":"<html><body><main id=\"capture\"><h1>Hello, world!</h1></main></body></html>","selector":"#capture"}' \
   --output screenshot.png
 ```
 

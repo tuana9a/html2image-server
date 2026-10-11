@@ -50,7 +50,7 @@ function findChromium() {
   });
 }
 
-function readHtml(request) {
+function readScreenshotRequest(request) {
   return new Promise((resolve, reject) => {
     const contentType = (request.headers['content-type'] || '')
       .split(';', 1)[0]
@@ -87,7 +87,11 @@ function readHtml(request) {
         if (typeof payload.html !== 'string') {
           throw new HttpError(400, 'JSON body must include a string "html" field');
         }
-        resolve(payload.html);
+        if (payload.selector !== undefined &&
+            (typeof payload.selector !== 'string' || !payload.selector.trim())) {
+          throw new HttpError(400, 'JSON "selector" field must be a non-empty CSS selector string');
+        }
+        resolve({ html: payload.html, selector: payload.selector || 'html' });
       } catch (error) {
         reject(error instanceof HttpError ? error : new HttpError(400, 'Invalid JSON body'));
       }
@@ -132,13 +136,13 @@ async function start() {
 
     let context;
     try {
-      const html = await readHtml(request);
+      const { html, selector } = await readScreenshotRequest(request);
       context = await browser.createBrowserContext();
       const page = await context.newPage();
       await page.setViewport({ width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT });
       page.setDefaultNavigationTimeout(15000);
       await page.setContent(html, { waitUntil: 'networkidle0' });
-      const image = await page.locator('html').screenshot({ type: 'png' });
+      const image = await page.locator(selector).screenshot({ type: 'png' });
 
       response.writeHead(200, {
         'content-type': 'image/png',
