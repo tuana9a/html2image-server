@@ -142,7 +142,11 @@ async function start() {
       await page.setViewport({ width: VIEWPORT_WIDTH, height: VIEWPORT_HEIGHT });
       page.setDefaultNavigationTimeout(15000);
       await page.setContent(html, { waitUntil: 'networkidle0' });
-      const image = await page.locator(selector).screenshot({ type: 'png' });
+      const element = await page.$(selector);
+      if (!element) {
+        throw new HttpError(400, `No element found for selector: ${selector}`);
+      }
+      const image = await element.screenshot({ type: 'png' });
 
       response.writeHead(200, {
         'content-type': 'image/png',
